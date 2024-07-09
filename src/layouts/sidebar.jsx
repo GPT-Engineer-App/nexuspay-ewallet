@@ -9,9 +9,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { CircleUser, Menu, Package2 } from "lucide-react";
+import { CircleUser, Menu, Wallet } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 import { navItems } from "../App";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Layout = () => {
   return (
@@ -20,11 +21,21 @@ const Layout = () => {
       <div className="flex flex-col">
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
           <MobileSidebar />
-          <div className="w-full flex-1">{/* Add nav bar content here! */}</div>
+          <div className="w-full flex-1 flex justify-between items-center">
+            <h1 className="text-lg font-semibold">Nexuspay</h1>
+            <UserDropdown />
+          </div>
         </header>
         <main className="flex-grow p-4 overflow-auto">
           <Outlet />
         </main>
+        <footer className="border-t py-4 px-6 text-center text-sm text-muted-foreground">
+          <nav className="flex justify-center space-x-4">
+            <a href="#" className="hover:underline">Terms of Service</a>
+            <a href="#" className="hover:underline">Privacy Policy</a>
+            <a href="#" className="hover:underline">Contact Us</a>
+          </nav>
+        </footer>
       </div>
     </div>
   );
@@ -35,11 +46,11 @@ const Sidebar = () => (
     <div className="flex h-full max-h-screen flex-col gap-2">
       <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
         <NavLink to="/" className="flex items-center gap-2 font-semibold">
-          <Package2 className="h-6 w-6" />
-          <span>Acme Inc</span>
+          <Wallet className="h-6 w-6" />
+          <span>Nexuspay</span>
         </NavLink>
       </div>
-      <div className="flex-1">
+      <div className="flex-1 overflow-auto py-2">
         <nav className="grid items-start px-2 text-sm font-medium lg:px-4 gap-2">
           {navItems.map((item) => (
             <SidebarNavLink key={item.to} to={item.to}>
@@ -48,6 +59,15 @@ const Sidebar = () => (
             </SidebarNavLink>
           ))}
         </nav>
+      </div>
+      <div className="mt-auto p-4 border-t">
+        <div className="flex items-center gap-2">
+          <Avatar className="h-8 w-8">
+            <AvatarImage src="/placeholder-avatar.jpg" alt="User" />
+            <AvatarFallback>U</AvatarFallback>
+          </Avatar>
+          <div className="text-sm font-medium">John Doe</div>
+        </div>
       </div>
     </div>
   </div>
@@ -67,11 +87,12 @@ const MobileSidebar = () => (
           to="/"
           className="flex items-center gap-2 text-lg font-semibold mb-4"
         >
-          <Package2 className="h-6 w-6" />
-          <span className="sr-only">Acme Inc</span>
+          <Wallet className="h-6 w-6" />
+          <span>Nexuspay</span>
         </NavLink>
         {navItems.map((item) => (
           <SidebarNavLink key={item.to} to={item.to}>
+            {item.icon}
             {item.title}
           </SidebarNavLink>
         ))}
@@ -83,15 +104,17 @@ const MobileSidebar = () => (
 const UserDropdown = () => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
-      <Button variant="secondary" size="icon" className="rounded-full">
-        <CircleUser className="h-5 w-5" />
-        <span className="sr-only">Toggle user menu</span>
+      <Button variant="ghost" size="icon" className="rounded-full">
+        <Avatar className="h-8 w-8">
+          <AvatarImage src="/placeholder-avatar.jpg" alt="User" />
+          <AvatarFallback>U</AvatarFallback>
+        </Avatar>
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end">
       <DropdownMenuLabel>My Account</DropdownMenuLabel>
       <DropdownMenuSeparator />
-      <DropdownMenuItem>Settings</DropdownMenuItem>
+      <DropdownMenuItem>Account</DropdownMenuItem>
       <DropdownMenuItem>Support</DropdownMenuItem>
       <DropdownMenuSeparator />
       <DropdownMenuItem>Logout</DropdownMenuItem>
