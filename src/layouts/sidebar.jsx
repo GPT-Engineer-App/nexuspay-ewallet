@@ -114,7 +114,9 @@ const UserDropdown = () => (
     <DropdownMenuContent align="end">
       <DropdownMenuLabel>My Account</DropdownMenuLabel>
       <DropdownMenuSeparator />
-      <DropdownMenuItem>Account</DropdownMenuItem>
+      <DropdownMenuItem as={NavLink} to="/profile">Profile</DropdownMenuItem>
+      <DropdownMenuItem as={NavLink} to="/bank-accounts">Bank Accounts</DropdownMenuItem>
+      <DropdownMenuItem as={NavLink} to="/settings">Settings</DropdownMenuItem>
       <DropdownMenuItem>Support</DropdownMenuItem>
       <DropdownMenuSeparator />
       <DropdownMenuItem>Logout</DropdownMenuItem>
