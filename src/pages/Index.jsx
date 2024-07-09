@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowUpRight, ArrowDownLeft, Plus, Send } from "lucide-react";
 import PaymentComponent from "@/components/PaymentComponent";
 import UserProfileComponent from "@/components/UserProfileComponent";
+import BankAccountManagement from "@/components/BankAccountManagement";
 
 const Index = () => {
   return (
@@ -68,6 +69,8 @@ const Index = () => {
       <PaymentComponent />
 
       <UserProfileComponent />
+
+      <BankAccountManagement />
     </div>
   );
 };
