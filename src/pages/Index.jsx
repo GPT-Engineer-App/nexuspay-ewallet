@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight, ArrowDownLeft, Plus, Send } from "lucide-react";
 import PaymentComponent from "@/components/PaymentComponent";
+import UserProfileComponent from "@/components/UserProfileComponent";
 
 const Index = () => {
   return (
@@ -65,6 +66,8 @@ const Index = () => {
       </Card>
 
       <PaymentComponent />
+
+      <UserProfileComponent />
     </div>
   );
 };
