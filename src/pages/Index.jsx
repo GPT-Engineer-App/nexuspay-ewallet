@@ -4,6 +4,7 @@ import { ArrowUpRight, ArrowDownLeft, Plus, Send } from "lucide-react";
 import PaymentComponent from "@/components/PaymentComponent";
 import UserProfileComponent from "@/components/UserProfileComponent";
 import BankAccountManagement from "@/components/BankAccountManagement";
+import PayoutComponent from "@/components/PayoutComponent";
 
 const Index = () => {
   return (
@@ -67,6 +68,8 @@ const Index = () => {
       </Card>
 
       <PaymentComponent />
+
+      <PayoutComponent />
 
       <UserProfileComponent />
 
