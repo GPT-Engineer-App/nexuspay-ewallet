@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
-import { processPayin, processPayout } from '@/lib/apiService';
+import React, { useState, useEffect } from 'react';
+import { processPayin } from '@/lib/apiService';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const PaymentComponent = () => {
+  const [profiles, setProfiles] = useState([
+    { id: 1, name: "John Doe", email: "john@example.com", mobilenumber: "1234567890", address: "123 Main St" },
+    { id: 2, name: "Jane Smith", email: "jane@example.com", mobilenumber: "0987654321", address: "456 Elm St" },
+  ]);
+  const [selectedProfile, setSelectedProfile] = useState(null);
   const [payinData, setPayinData] = useState({
     name: "",
     email: "",
@@ -18,26 +24,29 @@ const PaymentComponent = () => {
     remarks: "live test payin"
   });
 
-  const [payoutData, setPayoutData] = useState({
-    name: "",
-    email: "",
-    amount: "",
-    mobilenumber: "",
-    address: "",
-    bank_account: "",
-    pay_method: "allbank_payout_g_exchange",
-    remarks: "cash out live test"
-  });
-
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
-  const handlePayinChange = (e) => {
-    setPayinData({ ...payinData, [e.target.name]: e.target.value });
+  useEffect(() => {
+    if (selectedProfile) {
+      setPayinData(prevData => ({
+        ...prevData,
+        name: selectedProfile.name,
+        email: selectedProfile.email,
+        mobilenumber: selectedProfile.mobilenumber,
+        address: selectedProfile.address,
+      }));
+    }
+  }, [selectedProfile]);
+
+  const handleProfileChange = (profileId) => {
+    const profile = profiles.find(p => p.id.toString() === profileId);
+    setSelectedProfile(profile);
   };
 
-  const handlePayoutChange = (e) => {
-    setPayoutData({ ...payoutData, [e.target.name]: e.target.value });
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setPayinData({ ...payinData, [name]: value });
   };
 
   const handlePayin = async (e) => {
@@ -60,102 +69,58 @@ const PaymentComponent = () => {
     }
   };
 
-  const handlePayout = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const result = await processPayout(payoutData);
-      toast({
-        title: "Payout Successful",
-        description: JSON.stringify(result, null, 2),
-      });
-    } catch (error) {
-      toast({
-        title: "Payout Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Payin</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handlePayin} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="payin-name">Name</Label>
-                <Input id="payin-name" name="name" value={payinData.name} onChange={handlePayinChange} required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="payin-email">Email</Label>
-                <Input id="payin-email" name="email" type="email" value={payinData.email} onChange={handlePayinChange} required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="payin-amount">Amount</Label>
-                <Input id="payin-amount" name="amount" type="number" value={payinData.amount} onChange={handlePayinChange} required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="payin-mobilenumber">Mobile Number</Label>
-                <Input id="payin-mobilenumber" name="mobilenumber" value={payinData.mobilenumber} onChange={handlePayinChange} required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="payin-address">Address</Label>
-                <Input id="payin-address" name="address" value={payinData.address} onChange={handlePayinChange} required />
-              </div>
-            </div>
-            <Button type="submit" disabled={loading}>
-              {loading ? 'Processing Payin...' : 'Process Payin'}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Payout</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handlePayout} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="payout-name">Name</Label>
-                <Input id="payout-name" name="name" value={payoutData.name} onChange={handlePayoutChange} required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="payout-email">Email</Label>
-                <Input id="payout-email" name="email" type="email" value={payoutData.email} onChange={handlePayoutChange} required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="payout-amount">Amount</Label>
-                <Input id="payout-amount" name="amount" type="number" value={payoutData.amount} onChange={handlePayoutChange} required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="payout-mobilenumber">Mobile Number</Label>
-                <Input id="payout-mobilenumber" name="mobilenumber" value={payoutData.mobilenumber} onChange={handlePayoutChange} required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="payout-address">Address</Label>
-                <Input id="payout-address" name="address" value={payoutData.address} onChange={handlePayoutChange} required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="payout-bank-account">Bank Account</Label>
-                <Input id="payout-bank-account" name="bank_account" value={payoutData.bank_account} onChange={handlePayoutChange} required />
-              </div>
-            </div>
-            <Button type="submit" disabled={loading}>
-              {loading ? 'Processing Payout...' : 'Process Payout'}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Payin</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handlePayin} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="profile">Select Profile</Label>
+            <Select onValueChange={handleProfileChange}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select a profile" />
+              </SelectTrigger>
+              <SelectContent>
+                {profiles.map((profile) => (
+                  <SelectItem key={profile.id} value={profile.id.toString()}>
+                    {profile.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="amount">Amount</Label>
+            <Input
+              id="amount"
+              name="amount"
+              type="number"
+              value={payinData.amount}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="pay_method">Payment Method</Label>
+            <Select name="pay_method" onValueChange={(value) => setPayinData({ ...payinData, pay_method: value })}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select payment method" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="sp-qrph">QR PH</SelectItem>
+                <SelectItem value="sp-gcash">GCash</SelectItem>
+                <SelectItem value="sp-maya">Maya</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <Button type="submit" disabled={loading}>
+            {loading ? 'Processing Payin...' : 'Process Payin'}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 
