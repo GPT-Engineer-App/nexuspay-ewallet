@@ -9,6 +9,7 @@ import UserProfile from "./pages/UserProfile.jsx";
 import BankAccounts from "./pages/BankAccounts.jsx";
 import Payin from "./pages/Payin.jsx";
 import Payout from "./pages/Payout.jsx";
+import PayinResponse from "./pages/PayinResponse.jsx";
 
 const queryClient = new QueryClient();
 
@@ -68,6 +69,7 @@ const App = () => {
               <Route path="bank-accounts" element={<BankAccounts />} />
               <Route path="payin" element={<Payin />} />
               <Route path="payout" element={<Payout />} />
+              <Route path="payin-response" element={<PayinResponse />} />
               {/* Add more routes here as needed */}
             </Route>
           </Routes>
