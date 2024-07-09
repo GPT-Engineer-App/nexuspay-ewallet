@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { processPayin } from '@/lib/apiService';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +21,7 @@ const PaymentComponent = () => {
 
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -31,10 +33,7 @@ const PaymentComponent = () => {
     setLoading(true);
     try {
       const result = await processPayin(payinData);
-      toast({
-        title: "Payin Successful",
-        description: JSON.stringify(result, null, 2),
-      });
+      navigate('/payin-response', { state: { response: result } });
     } catch (error) {
       toast({
         title: "Payin Error",
